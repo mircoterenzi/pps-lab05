@@ -17,7 +17,8 @@ object Course:
                               override val courseId: String,
                               override val title: String,
                               override val instructor: String,
-                              override val category: String) extends Course
+                              override val category: String) extends Course:
+      override def toString: String = courseId
 
 /**
  * Manages courses and student enrollments on an online learning platform.
@@ -92,17 +93,28 @@ end OnlineCoursePlatform
 
 object OnlineCoursePlatform:
   // Factory method for creating an empty platform instance
+  private case class StudentCoursePair(name: String, course: String)
+  private var courses: Sequence[Course] = Sequence.Nil()
+  private var studentsEnrolled: Sequence[StudentCoursePair] = Sequence.Nil()
+
   def apply(): OnlineCoursePlatform = OnlineCoursePlatformImpl()
-    private class OnlineCoursePlatformImpl() extends OnlineCoursePlatform:
-      def addCourse(course: Course): Unit = ???
-      def findCoursesByCategory(category: String): Sequence[Course] = ???
-      def getCourse(courseId: String): Optional[Course] = ???
-      def removeCourse(course: Course): Unit = ???
-      def isCourseAvailable(courseId: String): Boolean = ???
-      def enrollStudent(studentId: String, courseId: String): Unit = ???
-      def unenrollStudent(studentId: String, courseId: String): Unit = ???
-      def getStudentEnrollments(studentId: String): Sequence[Course] = ???
-      def isStudentEnrolled(studentId: String, courseId: String): Boolean = ???
+    private class OnlineCoursePlatformImpl extends OnlineCoursePlatform:
+      def addCourse(course: Course): Unit = courses = Sequence.Cons(course, courses)
+      def findCoursesByCategory(category: String): Sequence[Course] = courses.filter(_.category == category)
+      def getCourse(courseId: String): Optional[Course] = courses.find(_.courseId == courseId)
+      def removeCourse(course: Course): Unit = courses = courses.filter(_ != course)
+      def isCourseAvailable(courseId: String): Boolean = courses.map(_.courseId).contains(courseId)
+      def enrollStudent(studentId: String, courseId: String): Unit =
+        studentsEnrolled = Sequence.Cons(StudentCoursePair(studentId, courseId), studentsEnrolled)
+      def unenrollStudent(studentId: String, courseId: String): Unit =
+        studentsEnrolled = studentsEnrolled.filter(_ != StudentCoursePair(studentId, courseId))
+      def getStudentEnrollments(studentId: String): Sequence[Course] =
+        studentsEnrolled.filter(_.name == studentId).map(p => getCourse(p.course)).flatMap{
+          case Optional.Just(c) => Sequence.Cons(c, Sequence.Nil())
+          case _ => Sequence.Nil()
+        }
+      def isStudentEnrolled(studentId: String, courseId: String): Boolean =
+        studentsEnrolled.contains(StudentCoursePair(studentId, courseId))
 
 /**
  * Represents an online learning platform that offers courses and manages student enrollments.
@@ -158,4 +170,3 @@ object OnlineCoursePlatform:
   platform.removeCourse(pythonCourse)
   println(s"Is PYTHON01 available? ${platform.isCourseAvailable(pythonCourse.courseId)}") // false
   println(s"Programming courses: ${platform.findCoursesByCategory("Programming")}") // Sequence(scalaCourse)
-
