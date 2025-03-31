@@ -92,7 +92,17 @@ end OnlineCoursePlatform
 
 object OnlineCoursePlatform:
   // Factory method for creating an empty platform instance
-  def apply(): OnlineCoursePlatform = ??? // Fill Here!
+  def apply(): OnlineCoursePlatform = OnlineCoursePlatformImpl()
+    private class OnlineCoursePlatformImpl() extends OnlineCoursePlatform:
+      def addCourse(course: Course): Unit = ???
+      def findCoursesByCategory(category: String): Sequence[Course] = ???
+      def getCourse(courseId: String): Optional[Course] = ???
+      def removeCourse(course: Course): Unit = ???
+      def isCourseAvailable(courseId: String): Boolean = ???
+      def enrollStudent(studentId: String, courseId: String): Unit = ???
+      def unenrollStudent(studentId: String, courseId: String): Unit = ???
+      def getStudentEnrollments(studentId: String): Sequence[Course] = ???
+      def isStudentEnrolled(studentId: String, courseId: String): Boolean = ???
 
 /**
  * Represents an online learning platform that offers courses and manages student enrollments.
