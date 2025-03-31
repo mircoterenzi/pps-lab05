@@ -12,13 +12,9 @@ trait Course:
 
 object Course:
   // Factory method for creating Course instances
-  def apply(courseId: String, title: String, instructor: String, category: String): Course = CourseImpl(courseId, title, instructor, category)
-    private class CourseImpl(
-                              override val courseId: String,
-                              override val title: String,
-                              override val instructor: String,
-                              override val category: String) extends Course:
-      override def toString: String = courseId
+  def apply(courseId: String, title: String, instructor: String, category: String): Course =
+    CourseImpl(courseId, title, instructor, category)
+  private case class CourseImpl(courseId: String, title: String, instructor: String, category: String) extends Course
 
 /**
  * Manages courses and student enrollments on an online learning platform.
