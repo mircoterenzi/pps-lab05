@@ -21,7 +21,7 @@ trait Vector2D:
   def dot(other: Vector2D): Double
 
   // Magnitude (length): ||(x, y)|| = sqrt(x*x + y*y)
-  def magnitude: Double
+  def magnitude(): Double
 
 object Vector2D:
   // Factory method to create Vector2D instances
@@ -60,17 +60,17 @@ object Vector2D:
   // Expected: 3*(-1) + 4*2 = -3 + 8 = 5.0
   println(s"Dot Product: $dotProduct")
 
-  val magV1 = v1.magnitude
+  val magV1 = v1.magnitude()
   // Expected: sqrt(3*3 + 4*4) = sqrt(9 + 16) = sqrt(25) = 5.0
   println(s"Magnitude of v1: $magV1")
 
-  val magV2 = v2.magnitude
+  val magV2 = v2.magnitude()
   // Expected: sqrt((-1)*(-1) + 2*2) = sqrt(1 + 4) = sqrt(5) approx 2.236
   println(s"Magnitude of v2: $magV2") // Check if close to 2.236
 
   // Check zero vector and unit vectors if implemented in companion object
-  // println(s"Zero vector: ${Vector2D.zero}")
-  // println(s"Dot product v1.dot(Vector2D.i): ${v1.dot(Vector2D.i)}") // Should be v1.x = 3.0
+  println(s"Zero vector: ${Vector2D.zero}")
+  println(s"Dot product v1.dot(Vector2D.i): ${v1.dot(Vector2D.i)}") // Should be v1.x = 3.0
 
   val multipleOps = (v1 + v2) * 3.0 - Vector2D(1.0, 1.0)
   // sum = (2.0, 6.0)
