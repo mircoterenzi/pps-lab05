@@ -32,6 +32,7 @@ object Vector2D:
       def *(scalar: Double): Vector2D = Vector2DImpl(this.x * scalar, this.y * scalar)
       def dot(other: Vector2D): Double = this.x * other.x + this.y * other.y
       def magnitude(): Double = sqrt(this.x * this.x + this.y * this.y)
+      override def toString: String = f"Vector2D(${this.x}, ${this.y})"
 
   // Common vectors (optional but nice)
   val zero: Vector2D = apply(0.0, 0.0)
