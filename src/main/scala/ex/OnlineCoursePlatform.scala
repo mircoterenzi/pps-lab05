@@ -98,23 +98,23 @@ object OnlineCoursePlatform:
   private var studentsEnrolled: Sequence[StudentCoursePair] = Sequence.Nil()
 
   def apply(): OnlineCoursePlatform = OnlineCoursePlatformImpl()
-    private class OnlineCoursePlatformImpl extends OnlineCoursePlatform:
-      def addCourse(course: Course): Unit = courses = Sequence.Cons(course, courses)
-      def findCoursesByCategory(category: String): Sequence[Course] = courses.filter(_.category == category)
-      def getCourse(courseId: String): Optional[Course] = courses.find(_.courseId == courseId)
-      def removeCourse(course: Course): Unit = courses = courses.filter(_ != course)
-      def isCourseAvailable(courseId: String): Boolean = courses.map(_.courseId).contains(courseId)
-      def enrollStudent(studentId: String, courseId: String): Unit =
-        studentsEnrolled = Sequence.Cons(StudentCoursePair(studentId, courseId), studentsEnrolled)
-      def unenrollStudent(studentId: String, courseId: String): Unit =
-        studentsEnrolled = studentsEnrolled.filter(_ != StudentCoursePair(studentId, courseId))
-      def getStudentEnrollments(studentId: String): Sequence[Course] =
-        studentsEnrolled.filter(_.name == studentId).map(p => getCourse(p.course)).flatMap{
-          case Optional.Just(c) => Sequence.Cons(c, Sequence.Nil())
-          case _ => Sequence.Nil()
-        }
-      def isStudentEnrolled(studentId: String, courseId: String): Boolean =
-        studentsEnrolled.contains(StudentCoursePair(studentId, courseId))
+  private class OnlineCoursePlatformImpl extends OnlineCoursePlatform:
+    def addCourse(course: Course): Unit = courses = Sequence.Cons(course, courses)
+    def findCoursesByCategory(category: String): Sequence[Course] = courses.filter(_.category == category)
+    def getCourse(courseId: String): Optional[Course] = courses.find(_.courseId == courseId)
+    def removeCourse(course: Course): Unit = courses = courses.filter(_ != course)
+    def isCourseAvailable(courseId: String): Boolean = courses.map(_.courseId).contains(courseId)
+    def enrollStudent(studentId: String, courseId: String): Unit =
+      studentsEnrolled = Sequence.Cons(StudentCoursePair(studentId, courseId), studentsEnrolled)
+    def unenrollStudent(studentId: String, courseId: String): Unit =
+      studentsEnrolled = studentsEnrolled.filter(_ != StudentCoursePair(studentId, courseId))
+    def getStudentEnrollments(studentId: String): Sequence[Course] =
+      studentsEnrolled.filter(_.name == studentId).map(p => getCourse(p.course)).flatMap{
+        case Optional.Just(c) => Sequence.Cons(c, Sequence.Nil())
+        case _ => Sequence.Nil()
+      }
+    def isStudentEnrolled(studentId: String, courseId: String): Boolean =
+      studentsEnrolled.contains(StudentCoursePair(studentId, courseId))
 
 /**
  * Represents an online learning platform that offers courses and manages student enrollments.
