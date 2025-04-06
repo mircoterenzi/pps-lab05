@@ -19,7 +19,7 @@ class LogicsImpl(private val size: Int, private val mines: Int) extends Logics:
   private val random = scala.util.Random()
   while (minesSet.size() != size)
     minesSet = Sequence.Cons(pair(random.nextInt(size), random.nextInt(size)), minesSet)
-  println(minesSet)
+  println(minesSet) // As in the given solution
 
   private def neighbours(x: Int, y: Int): Int =
     Stream.iterate(x - 1)(_ + 1)
@@ -33,9 +33,11 @@ class LogicsImpl(private val size: Int, private val mines: Int) extends Logics:
 
   override def hit(x: Int, y: Int): java.util.Optional[Integer] =
     val p = pair(x, y)
-    OptionToOptional(if minesSet.contains(p) then ScalaOptional.Empty() else
-      selected = Sequence.Cons(p, selected)
-      ScalaOptional.Just(neighbours(x, y))
+    OptionToOptional(
+      if minesSet.contains(p) then ScalaOptional.Empty()
+      else
+        selected = Sequence.Cons(p, selected)
+        ScalaOptional.Just(neighbours(x, y))
     )
 
   override def won(): Boolean = selected.size() + minesSet.size() == size * size
