@@ -19,15 +19,12 @@ class LogicsImpl(private val size: Int, private val mines: Int) extends Logics:
   private val random = scala.util.Random()
   while (minesSet.size() != size)
     minesSet = Sequence.Cons(pair(random.nextInt(size), random.nextInt(size)), minesSet)
-  println(minesSet) // As in the given solution
 
-  private def neighbours(x: Int, y: Int): Int =
-    Stream.iterate(x - 1)(_ + 1)
-    .take(3)
-    .flatMap(xx =>
-      Stream.iterate(y - 1)(_ + 1)
-      .take(3)
-      .map(yy => pair(xx, yy)))
+  private def getAdjacentMinesCount(p: pair): Int =
+    Stream.iterate(p.x - 1)(_ + 1).take(3)
+    .flatMap(x =>
+      Stream.iterate(p.y - 1)(_ + 1).take(3)
+      .map(pair(x, _)))
     .filter(minesSet.contains(_))
     .toList.size()
 
@@ -37,7 +34,7 @@ class LogicsImpl(private val size: Int, private val mines: Int) extends Logics:
       if minesSet.contains(p) then ScalaOptional.Empty()
       else
         selected = Sequence.Cons(p, selected)
-        ScalaOptional.Just(neighbours(x, y))
+        ScalaOptional.Just(getAdjacentMinesCount(p))
     )
 
   override def won(): Boolean = selected.size() + minesSet.size() == size * size
