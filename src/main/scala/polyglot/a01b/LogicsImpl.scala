@@ -21,11 +21,15 @@ class LogicsImpl(private val size: Int, private val mines: Int) extends Logics:
     minesSet = Sequence.Cons(pair(random.nextInt(size), random.nextInt(size)), minesSet)
   println(minesSet)
 
-  private def neighbours(x: Int, y: Int): Int = Stream.iterate(x - 1)(_ + 2)
-    .flatMap(xx => Stream.iterate(y - 1)(_ + 2).map(yy => pair(xx, yy)))
-    .toList
+  private def neighbours(x: Int, y: Int): Int =
+    Stream.iterate(x - 1)(_ + 1)
+    .take(3)
+    .flatMap(xx =>
+      Stream.iterate(y - 1)(_ + 1)
+      .take(3)
+      .map(yy => pair(xx, yy)))
     .filter(minesSet.contains(_))
-    .size()
+    .toList.size()
 
   override def hit(x: Int, y: Int): java.util.Optional[Integer] =
     val p = pair(x, y)
